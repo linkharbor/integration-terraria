@@ -1,0 +1,20 @@
+# systemd unit — copy to /etc/systemd/system/integration-terraria.service,
+# put the secrets into /etc/integration-terraria.env (chmod 600):
+#   LH_INGEST_URL=https://dock.at-harbor.com/v1/ingest/123
+#   LH_INGEST_SECRET=…
+#   TSHOCK_TOKEN=…
+[Unit]
+Description=LinkHarbor Terraria (TShock) agent
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+EnvironmentFile=/etc/integration-terraria.env
+ExecStart=/usr/bin/python3 /opt/integration-terraria/agent.py --host 127.0.0.1 --port 7878 --address "203.0.113.10:7777" --url "https://discord.gg/xyz"
+Restart=always
+RestartSec=10
+User=nobody
+
+[Install]
+WantedBy=multi-user.target
